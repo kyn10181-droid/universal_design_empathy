@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두를 위한 세상 - 장애공감 & 유니버설 디자인 탐험대</title>
+<style>
+:root{--navy:#173d3a;--teal:#247b72;--mint:#dff5ed;--cream:#fff9e9;--orange:#f2a64a;--coral:#f27b68;--ink:#263b39;--muted:#637875;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#e9f7f1,#fff8e9);font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+button{font:inherit;cursor:pointer;border:0}
+header{background:var(--navy);color:white;padding:18px 16px 14px;text-align:center;position:relative;overflow:hidden}
+header:before,header:after{content:"✦ ✧ ✦";position:absolute;color:#f8d68b;font-size:25px;opacity:.65;top:20px}
+header:before{left:4%}header:after{right:4%}
+.brand{font-size:13px;letter-spacing:2px;color:#f9d997;font-weight:800}
+h1{margin:7px 0 5px;font-size:clamp(25px,5vw,42px);line-height:1.2}
+header p{margin:7px auto 0;max-width:720px;color:#e4f3eb;font-size:15px;line-height:1.6}
+.mascot{font-size:54px;display:inline-block;filter:drop-shadow(0 4px 1px #092b29);margin-top:5px}
+.wrap{max-width:1120px;margin:auto;padding:16px}
+.toprow{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:2px 0 14px}
+.progressbox{background:white;border:2px solid #d8ebe2;border-radius:16px;padding:10px 14px;flex:1;min-width:220px}
+.progressline{height:10px;background:#e8eee9;border-radius:20px;overflow:hidden;margin-top:7px}
+.progressline span{display:block;height:100%;width:0;background:linear-gradient(90deg,#52b89a,#f4b95e);transition:.3s}
+.stars{font-weight:900;color:#9b681c;background:#fff2d2;border:2px solid #f4d58f;padding:11px 15px;border-radius:16px}
+nav{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}
+nav button{background:#fff;border:2px solid #d6e9df;color:var(--navy);font-weight:800;border-radius:14px;padding:12px 5px;box-shadow:0 3px 0 #d3e3db}
+nav button.active{background:var(--navy);color:white;border-color:var(--navy);box-shadow:0 3px 0 #092b29}
+nav button span{display:block;font-size:22px;margin-bottom:4px}
+.panel{display:none;background:white;border:2px solid #e1ece4;border-radius:22px;padding:clamp(16px,3vw,28px);box-shadow:0 8px 24px #244d3b12;min-height:430px}
+.panel.active{display:block}
+h2{color:var(--navy);font-size:clamp(22px,3vw,30px);margin:0 0 8px}
+.lead{color:var(--muted);line-height:1.7;margin:0 0 20px}
+.heroCard{background:linear-gradient(115deg,#e5f7ee,#fff2d8);border-radius:20px;padding:20px;display:flex;gap:16px;align-items:center;margin-bottom:18px}
+.heroCard .big{font-size:68px;min-width:82px;text-align:center}
+.heroCard p{line-height:1.7;margin:5px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tile{background:#fbfcf8;border:2px solid #e4eee5;border-radius:16px;padding:15px}
+.tile .ico{font-size:32px}.tile h3{margin:7px 0;color:var(--teal);font-size:17px}.tile p{margin:0;font-size:14px;line-height:1.6;color:#526662}
+.keys{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:15px 0}
+.key{background:#fff8e7;border:2px solid #f1d9a5;border-radius:15px;padding:12px 7px;text-align:center}
+.key b{display:block;font-size:25px}.key strong{display:block;margin:5px 0;font-size:14px}.key small{color:#6c6252;line-height:1.4}
+.callout{background:#e9f7f2;border-left:5px solid #51a78c;padding:14px 16px;border-radius:10px;line-height:1.7;margin:16px 0}
+.btn{background:var(--teal);color:white;padding:12px 17px;border-radius:13px;font-weight:800;box-shadow:0 3px 0 #15564e;margin:4px 4px 4px 0}
+.btn.alt{background:#f4b75c;color:#46341d;box-shadow:0 3px 0 #d49232}
+.btn.light{background:#eef7f1;color:var(--navy);box-shadow:0 3px 0 #d4e6d9}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.question{font-size:20px;font-weight:900;line-height:1.55;margin:15px 0}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opt{padding:15px;border:2px solid #dce9e0;background:#fbfdf9;border-radius:14px;text-align:left;font-weight:700;line-height:1.5;color:var(--ink)}
+.opt:hover{border-color:#65b79c;background:#f1fbf5}
+.opt.selected{border-color:#247b72;background:#e3f6ed}
+.feedback{display:none;padding:13px 15px;border-radius:12px;margin:14px 0;font-weight:700;line-height:1.6}
+.feedback.show{display:block}.feedback.good{background:#e4f7eb;color:#176342}.feedback.bad{background:#fff0e9;color:#914b30}
+.quizmeta{color:#71827d;font-weight:700;font-size:14px}
+.gamearea{background:linear-gradient(#e8f8f1,#fff8e8);border:2px dashed #b9d9c8;border-radius:18px;padding:18px;min-height:235px}
+.scene{font-size:62px;text-align:center;letter-spacing:12px;margin:12px 0}
+.choicecards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.choicecard{background:#fff;border:2px solid #e5e8dc;border-radius:16px;padding:16px;text-align:center;min-height:130px}
+.choicecard .pic{font-size:42px}.choicecard strong{display:block;margin:7px 0}
+.sortitem{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fbfcf8;border:2px solid #e5eee6;border-radius:14px;padding:12px;margin:8px 0}
+.sortitem p{margin:0;line-height:1.5;font-weight:700}
+.sortbuttons{display:flex;gap:5px;flex-shrink:0}
+.sortbuttons button{border-radius:10px;padding:9px 11px;background:#eaf5ed;color:#22564a;font-weight:800}
+.sortbuttons button:last-child{background:#fff0df;color:#8c5522}
+.inputrow{display:flex;gap:8px;flex-wrap:wrap}
+input,textarea,select{font:inherit;border:2px solid #d5e4da;border-radius:12px;padding:12px;width:100%;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+.result{font-weight:800;color:var(--teal);margin:10px 0}
+footer{text-align:center;color:#6f827c;font-size:12px;padding:18px}
+.badge{display:inline-block;background:#fff0cc;color:#835719;border-radius:30px;padding:5px 10px;font-weight:800;font-size:12px;margin-bottom:8px}
+@media(max-width:760px){nav{grid-template-columns:repeat(3,1fr)}#memoryGrid{grid-template-columns:repeat(2,1fr)!important}.grid{grid-template-columns:1fr 1fr}.keys{grid-template-columns:repeat(2,1fr)}.heroCard{align-items:flex-start}.options,.choicecards{grid-template-columns:1fr}.sortitem{align-items:flex-start;flex-direction:column}.sortbuttons{width:100%}.sortbuttons button{flex:1}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.heroCard .big{font-size:48px;min-width:55px}.mascot{font-size:44px}nav button{font-size:13px;padding:9px 3px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">SPECIAL MISSION · GRADE 4</div>
+ <div class="mascot" aria-label="꼬마 펭귄 캐릭터">🐧</div>
+ <h1>모두를 위한 세상 탐험대!</h1>
+ <p>다름을 이해하고, 불편함을 발견하고, 모두가 편리한 세상을 함께 만들어요.</p>
+</header>
+<div class="wrap">
+ <div class="toprow">
+  <div class="progressbox"><b>🌱 나의 공감 성장 게이지</b><div class="progressline"><span id="progress"></span></div><small id="progressText">미션을 완료하고 별을 모아 보세요!</small></div>
+  <div class="stars">⭐ <span id="starCount">0</span>개</div>
+ </div>
+ <nav>
+  <button class="active" data-tab="learn"><span>📚</span>배우기</button>
+  <button data-tab="spot"><span>🔎</span>불편 찾기</button>
+  <button data-tab="game"><span>🎮</span>게임 미션</button>
+  <button data-tab="quiz"><span>🧠</span>퀴즈 도전</button>
+  <button data-tab="design"><span>💡</span>디자인 연구소</button>
+  <button data-tab="memory"><span>🧩</span>짝꿍 찾기</button>
+ </nav>
+
+ <section class="panel active" id="learn">
+  <span class="badge">MISSION 01 · 알아보기</span>
+  <h2>유니버설 디자인이란?</h2>
+  <p class="lead">우리 주변을 살펴보며 누구에게나 편리한 디자인이 무엇인지 알아봐요.</p>
+  <div class="heroCard"><div class="big">🐧</div><div><b>안녕! 나는 꼬마 펭귄 토리야.</b><p>사람마다 나이, 키, 몸의 조건, 생활 방식이 달라. 유니버설 디자인은 이런 차이를 생각해서 <b>가능한 많은 사람이 편리하고 안전하게 이용할 수 있도록</b> 만드는 디자인이야!</p></div></div>
+  <div class="grid">
+   <div class="tile"><div class="ico">🧑‍🤝‍🧑</div><h3>누구나 편리하게</h3><p>어린이, 어른, 노인, 장애가 있는 사람 등 다양한 사람이 함께 이용할 수 있어요.</p></div>
+   <div class="tile"><div class="ico">🛡️</div><h3>안전하고 쉽게</h3><p>복잡하거나 헷갈리지 않게 만들어 실수와 위험을 줄여요.</p></div>
+   <div class="tile"><div class="ico">💚</div><h3>모두를 배려해요</h3><p>한 사람을 위한 배려가 결국 더 많은 사람에게 도움이 돼요.</p></div>
+  </div>
+  <h2 style="margin-top:24px">발명의 비밀 열쇠 5가지 🔑</h2>
+  <div class="keys">
+   <div class="key"><b>👥</b><strong>누구나 사용 가능</strong><small>나이와 몸 상태에 관계없이</small></div>
+   <div class="key"><b>👆</b><strong>간단하고 직관적</strong><small>한눈에 사용법을 알 수 있게</small></div>
+   <div class="key"><b>🦺</b><strong>안전 보장</strong><small>실수와 다칠 위험을 줄이게</small></div>
+   <div class="key"><b>💞</b><strong>배려와 공감</strong><small>다양한 사람의 입장에서</small></div>
+   <div class="key"><b>🏡</b><strong>생활 속 활용</strong><small>실제로 자주 쓸 수 있게</small></div>
+  </div>
+  <h2 style="margin-top:22px">우리 주변의 유니버설 디자인</h2>
+  <div class="grid">
+   <div class="tile"><div class="ico">🚌</div><h3>저상버스</h3><p>높은 계단 대신 낮은 바닥으로 승하차가 편리해요.</p></div>
+   <div class="tile"><div class="ico">♿</div><h3>경사로</h3><p>계단을 이용하기 어려운 사람과 유모차도 이동할 수 있어요.</p></div>
+   <div class="tile"><div class="ico">🚪</div><h3>레버형 손잡이</h3><p>손으로 꽉 잡지 않아도 팔이나 손으로 쉽게 열 수 있어요.</p></div>
+   <div class="tile"><div class="ico">🔘</div><h3>큰 엘리베이터 버튼</h3><p>누르기 쉽고 숫자나 표시를 알아보기 편해요.</p></div>
+   <div class="tile"><div class="ico">🥫</div><h3>이지 오픈 캔</h3><p>힘이 약해도 비교적 쉽게 열 수 있어요.</p></div>
+   <div class="tile"><div class="ico">🛝</div><h3>모두를 위한 놀이터</h3><p>여러 어린이가 함께 놀 수 있도록 길과 놀이기구를 설계해요.</p></div>
+  </div>
+  <div class="callout">💬 기억해요! 장애는 개인의 특성만으로 생기는 것이 아니라, 계단만 있는 출입구나 알아보기 어려운 안내처럼 주변 환경의 장벽 때문에 활동이 더 어려워질 수도 있어요. 장벽을 줄이는 환경을 함께 만들어 봐요.</div>
+  <button class="btn" onclick="complete('learn')">배우기 미션 완료 ⭐</button>
+ </section>
+
+ <section class="panel" id="spot">
+  <span class="badge">MISSION 02 · 관찰하기</span>
+  <h2>불편함 탐정단 🔎</h2>
+  <p class="lead">누군가를 흉내 내는 대신, 장소와 물건에 어떤 장벽이 있는지 찾아봐요. 더 편리하게 바꿀 방법도 생각해 보세요.</p>
+  <div class="gamearea">
+   <div class="scene">🏫 🚪 🪜</div>
+   <div class="question">학교 정문에 계단만 있고 경사로가 없어요. 어떤 점이 불편할 수 있을까요?</div>
+   <div class="options">
+    <button class="opt" onclick="spotAnswer(0)">A. 휠체어를 이용하거나 유모차를 미는 사람은 들어가기 어려울 수 있어요.</button>
+    <button class="opt" onclick="spotAnswer(1)">B. 모두가 더 빨리 들어갈 수 있어요.</button>
+   </div>
+   <div class="feedback" id="spotFeedback"></div>
+  </div>
+  <h3 style="color:var(--teal);margin-top:22px">생활 속 장벽을 찾아보세요</h3>
+  <div id="sortList"></div>
+  <div class="callout">🌟 탐정의 약속: 불편을 겪는 사람에게 “무조건 도와줄게!”라고 하기보다 먼저 “도움이 필요하세요?”라고 물어보고, 원하는 방법을 존중해요.</div>
+  <button class="btn" onclick="complete('spot')">탐정 미션 완료 ⭐</button>
+ </section>
+
+ <section class="panel" id="game">
+  <span class="badge">MISSION 03 · 게임으로 익히기</span>
+  <h2>유니버설 디자인 선택 게임 🎮</h2>
+  <p class="lead">상황을 읽고 모두가 이용하기 더 좋은 방법을 골라요. 총 5개의 미션이 있어요.</p>
+  <div class="gamearea">
+   <div class="quizmeta" id="gameMeta">미션 1 / 5</div>
+   <div class="scene" id="gameScene">🚌</div>
+   <div class="question" id="gameQuestion">버스에 오르기 어려운 사람이 있어요. 어떤 버스가 더 좋을까요?</div>
+   <div class="options" id="gameOptions"></div>
+   <div class="feedback" id="gameFeedback"></div>
+   <div class="result" id="gameResult"></div>
+   <button class="btn" id="gameNext" style="display:none" onclick="nextGame()">다음 미션 ➜</button>
+  </div>
+  <button class="btn light" onclick="resetGame()">게임 다시 하기 ↻</button>
+ </section>
+
+ <section class="panel" id="quiz">
+  <span class="badge">MISSION 04 · 실력 확인</span>
+  <h2>공감 지식 퀴즈 🧠</h2>
+  <p class="lead">OX 퀴즈와 객관식 퀴즈에 도전해요. 정답을 고르면 설명도 확인할 수 있어요.</p>
+  <div class="gamearea">
+   <div class="quizmeta" id="quizMeta">문제 1 / 8</div>
+   <div class="question" id="quizQuestion"></div>
+   <div class="options" id="quizOptions"></div>
+   <div class="feedback" id="quizFeedback"></div>
+   <button class="btn" id="quizNext" style="display:none" onclick="nextQuiz()">다음 문제 ➜</button>
+   <div class="result" id="quizResult"></div>
+  </div>
+  <button class="btn light" onclick="resetQuiz()">퀴즈 다시 도전 ↻</button>
+ </section>
+
+ <section class="panel" id="design">
+  <span class="badge">MISSION 05 · 직접 만들기</span>
+  <h2>우리 학교 디자인 연구소 💡</h2>
+  <p class="lead">우리 학교나 동네에서 불편한 점을 하나 찾아, 모두가 편리하게 이용할 방법을 설계해 봐요.</p>
+  <div class="heroCard"><div class="big">🧑‍🔬</div><div><b>디자인 연구원이 되어 보세요!</b><p>좋은 아이디어는 작은 관찰에서 시작해요. 친구와 함께 생각하고, 실제로 바꿀 수 있는 방법을 찾아봅시다.</p></div></div>
+  <label><b>1. 어디를 바꾸고 싶나요?</b></label>
+  <select id="place"><option>교실</option><option>복도와 계단</option><option>화장실</option><option>급식실</option><option>학교 운동장·놀이터</option><option>학교 정문·통학로</option><option>우리 동네</option></select>
+  <p><label for="problem"><b>2. 어떤 점이 불편한가요?</b></label></p>
+  <textarea id="problem" placeholder="예: 교실 안내문 글씨가 작고 복잡해서 한눈에 알아보기 어려워요."></textarea>
+  <p><label for="idea"><b>3. 모두를 위해 어떻게 바꾸면 좋을까요?</b></label></p>
+  <textarea id="idea" placeholder="예: 큰 글씨와 그림 기호를 함께 사용하고, 색깔로 장소를 구분해요."></textarea>
+  <p><b>4. 발명의 비밀 열쇠 중 어떤 점을 생각했나요?</b></p>
+  <div class="options" id="keyChecks">
+   <label class="opt"><input type="checkbox" value="누구나 사용 가능"> 누구나 사용 가능</label>
+   <label class="opt"><input type="checkbox" value="간단하고 직관적"> 간단하고 직관적</label>
+   <label class="opt"><input type="checkbox" value="안전 보장"> 안전 보장</label>
+   <label class="opt"><input type="checkbox" value="배려와 공감"> 배려와 공감</label>
+   <label class="opt"><input type="checkbox" value="생활 속 활용"> 생활 속 활용</label>
+  </div>
+  <button class="btn" onclick="makePlan()">나의 디자인 제안서 만들기 ✨</button>
+  <div class="feedback" id="planOutput"></div>
+  <button class="btn alt" onclick="window.print()">제안서 인쇄하기 🖨️</button>
+  <div class="callout">함께 실천하기: 교실에서 불편한 점 함께 고치기 · 도움이 필요한 친구의 의견 존중하기 · 학교 시설 개선 의견 내기 · 좋은 아이디어를 가족에게도 알려주기</div>
+ </section>
+
+ <section class="panel" id="memory">
+  <span class="badge">BONUS GAME · 짝을 찾아라!</span>
+  <h2>유니버설 디자인 짝꿍 찾기 🧩</h2>
+  <p class="lead">카드를 두 장씩 눌러서 ‘디자인 열쇠’와 ‘뜻’을 짝지어 보세요. 다섯 쌍을 모두 찾으면 성공이에요!</p>
+  <div class="gamearea">
+   <div class="toprow"><b id="memoryCount">찾은 짝 0 / 5</b><b id="memoryMoves">시도 0회</b></div>
+   <div id="memoryGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:9px"></div>
+   <div class="feedback" id="memoryFeedback"></div>
+   <div class="result" id="memoryResult"></div>
+   <button class="btn" onclick="startMemory()">다시 섞기 ↻</button>
+  </div>
+  <div class="callout">💡 힌트: 다섯 가지 열쇠는 ‘누구나 사용 가능, 간단하고 직관적, 안전 보장, 배려와 공감, 생활 속 활용’이에요.</div>
+ </section>
+
+</div>
+<footer>모두를 위한 세상 탐험대 · 초등학교 4학년 장애공감 및 유니버설 디자인 교육</footer>
+<script>
+let stars=0,done=new Set();
+function updateProgress(){document.getElementById('starCount').textContent=stars;document.getElementById('progress').style.width=(done.size/6*100)+'%';document.getElementById('progressText').textContent=`${done.size}/6개 미션 완료 · 별 ${stars}개 모았어요!`}
+function complete(id){if(!done.has(id)){done.add(id);stars+=2;updateProgress();alert('미션 성공! 별 2개를 받았어요 ⭐')}else alert('이미 완료한 미션이에요! 다음 미션에 도전해 보세요.')}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active')}));
+function spotAnswer(n){let f=document.getElementById('spotFeedback');f.className='feedback show '+(n===0?'good':'bad');f.textContent=n===0?'정답이에요! 계단만 있으면 휠체어나 유모차를 이용하는 사람은 이동하기 어려울 수 있어요. 경사로나 승강기를 함께 설치하면 더 많은 사람이 이용할 수 있어요.':'다시 생각해 봐요. 출입구에 계단만 있다면 누구에게 불편할 수 있을까요?';}
+const sortItems=[
+ ['🚪 무거운 문을 두 손으로 세게 밀어야 열려요.','불편한 점','레버형 손잡이나 자동문을 설치하면 더 쉽게 열 수 있어요.'],
+ ['🔤 안내 표지판의 글씨가 너무 작고 색이 흐려요.','불편한 점','큰 글씨, 선명한 색 대비, 그림 기호를 함께 사용해요.'],
+ ['🚌 버스 바닥이 높아 타고 내리기 어려워요.','불편한 점','저상버스와 안전한 승하차 공간을 마련해요.'],
+ ['🛝 놀이터 입구에 턱이 높고 이동 통로가 좁아요.','불편한 점','넓고 평평한 길과 다양한 놀이 시설을 만들어요.']
+];
+document.getElementById('sortList').innerHTML=sortItems.map((x,i)=>`<div class="sortitem"><p>${x[0]}</p><div class="sortbuttons"><button onclick="showTip(${i})">개선 아이디어 보기</button></div></div>`).join('');
+function showTip(i){alert(sortItems[i][2])}
+const games=[
+ {e:'🚌',q:'버스에 오르기 어려운 사람도 편리하게 이용하려면?',o:['바닥이 낮은 저상버스를 이용해요.','높은 계단만 있는 버스를 이용해요.'],a:0,f:'저상버스는 바닥이 낮아 휠체어 이용자, 어린이, 어르신, 유모차를 미는 사람 등에게 도움이 돼요.'},
+ {e:'🚪',q:'손잡이를 꽉 잡기 어려운 사람도 문을 열기 쉽게 하려면?',o:['작고 둥근 손잡이를 달아요.','아래로 누르는 레버형 손잡이를 달아요.'],a:1,f:'레버형 손잡이는 손으로 세게 움켜쥐지 않아도 팔이나 손으로 눌러 열 수 있어요.'},
+ {e:'🔘',q:'엘리베이터 버튼을 더 쉽게 사용하게 하려면?',o:['작은 글씨와 작은 버튼만 사용해요.','큰 버튼과 알아보기 쉬운 표시를 사용해요.'],a:1,f:'큰 버튼과 선명한 표시, 점자 등 여러 방식의 정보는 다양한 사람이 이용하는 데 도움이 돼요.'},
+ {e:'🥫',q:'손힘이 약한 사람도 쉽게 열 수 있는 물건은?',o:['손잡이가 있는 이지 오픈 캔','도구 없이는 열기 힘든 꽉 닫힌 캔'],a:0,f:'이지 오픈 캔은 비교적 적은 힘으로 열 수 있도록 만든 생활 속 디자인이에요.'},
+ {e:'🏫',q:'학교 안내를 더 많은 학생이 이해하기 쉽게 하려면?',o:['작은 글씨로 긴 문장만 적어요.','큰 글씨, 그림, 쉬운 표현을 함께 사용해요.'],a:1,f:'큰 글씨와 그림, 쉬운 표현을 함께 사용하면 다양한 학생이 정보를 이해하기 쉬워요.'}
+];
+let gi=0,gameLocked=false;
+function renderGame(){let g=games[gi];document.getElementById('gameMeta').textContent=`미션 ${gi+1} / ${games.length}`;document.getElementById('gameScene').textContent=g.e;document.getElementById('gameQuestion').textContent=g.q;document.getElementById('gameOptions').innerHTML=g.o.map((v,i)=>`<button class="opt" onclick="gameAnswer(${i})">${v}</button>`).join('');document.getElementById('gameFeedback').className='feedback';document.getElementById('gameResult').textContent='';document.getElementById('gameNext').style.display='none';gameLocked=false}
+function gameAnswer(n){if(gameLocked)return;gameLocked=true;let g=games[gi],f=document.getElementById('gameFeedback');f.className='feedback show '+(n===g.a?'good':'bad');f.textContent=(n===g.a?'정답! ':'아쉬워요. ')+g.f;if(n===g.a){stars++;updateProgress()}document.getElementById('gameNext').style.display='inline-block';document.getElementById('gameNext').textContent=gi===games.length-1?'결과 보기':'다음 미션 ➜'}
+function nextGame(){if(gi<games.length-1){gi++;renderGame()}else{document.getElementById('gameQuestion').textContent='모든 미션을 마쳤어요! 우리 주변의 불편함을 발견하고 바꾸는 멋진 디자이너예요!';document.getElementById('gameScene').textContent='🏆🐧⭐';document.getElementById('gameOptions').innerHTML='';document.getElementById('gameFeedback').className='feedback';document.getElementById('gameNext').style.display='none';complete('game')}}
+function resetGame(){gi=0;renderGame()}
+const qs=[
+ {q:'유니버설 디자인은 가능한 많은 사람이 편리하고 안전하게 이용하도록 만드는 디자인이에요.',o:['O','X'],a:0,f:'맞아요! 사람마다 조건이 다르다는 점을 생각해 모두가 이용하기 편리하도록 설계해요.'},
+ {q:'유니버설 디자인은 장애가 있는 사람만을 위한 디자인이에요.',o:['O','X'],a:1,f:'아니에요. 어린이, 어른, 어르신, 유모차를 이용하는 사람 등 모두에게 도움이 될 수 있어요.'},
+ {q:'저상버스는 버스 바닥이 낮아 승하차를 편리하게 해 줘요.',o:['O','X'],a:0,f:'맞아요! 계단을 오르기 어려운 사람도 더 편리하게 이용할 수 있어요.'},
+ {q:'발명의 비밀 열쇠 5가지 중 하나는 안전 보장이에요.',o:['O','X'],a:0,f:'맞아요! 실수하거나 다칠 위험을 줄이도록 안전하게 설계해야 해요.'},
+ {q:'유니버설 디자인을 만들 때는 사용 방법이 복잡할수록 좋아요.',o:['O','X'],a:1,f:'아니에요. 간단하고 직관적이어서 한눈에 사용 방법을 알 수 있어야 해요.'},
+ {q:'도움이 필요해 보이는 친구에게는 먼저 무엇을 하면 좋을까요?',o:['물어보지 않고 바로 도와줘요.','도움이 필요한지 먼저 물어봐요.'],a:1,f:'먼저 의사를 물어보고 원하는 방법을 존중하는 것이 배려예요.'},
+ {q:'다음 중 유니버설 디자인 사례로 알맞은 것은?',o:['큰 글씨와 그림이 함께 있는 안내판','아주 작은 글씨만 있는 안내판'],a:0,f:'큰 글씨와 그림 기호를 함께 쓰면 다양한 사람이 정보를 이해하기 쉬워요.'},
+ {q:'우리 학교를 더 편리하게 바꾸는 일은 누구와 함께 할 수 있을까요?',o:['특정한 사람만','학생, 선생님, 가족 등 모두'],a:1,f:'모두가 의견을 나누고 함께 노력하면 더 좋은 학교와 동네를 만들 수 있어요.'}
+];
+let qi=0,quizLocked=false;
+function renderQuiz(){let q=qs[qi];document.getElementById('quizMeta').textContent=`문제 ${qi+1} / ${qs.length}`;document.getElementById('quizQuestion').textContent=q.q;document.getElementById('quizOptions').innerHTML=q.o.map((v,i)=>`<button class="opt" onclick="answerQuiz(${i})">${v}</button>`).join('');document.getElementById('quizFeedback').className='feedback';document.getElementById('quizNext').style.display='none';document.getElementById('quizResult').textContent='';quizLocked=false}
+function answerQuiz(n){if(quizLocked)return;quizLocked=true;let q=qs[qi],f=document.getElementById('quizFeedback');f.className='feedback show '+(n===q.a?'good':'bad');f.textContent=(n===q.a?'정답이에요! ':'다시 기억해 봐요. ')+q.f;if(n===q.a){stars++;updateProgress()}document.getElementById('quizNext').style.display='inline-block';document.getElementById('quizNext').textContent=qi===qs.length-1?'결과 확인':'다음 문제 ➜'}
+function nextQuiz(){if(qi<qs.length-1){qi++;renderQuiz()}else{document.getElementById('quizQuestion').textContent='퀴즈 도전 완료! 배운 내용을 주변에서도 실천해 봐요.';document.getElementById('quizOptions').innerHTML='';document.getElementById('quizFeedback').className='feedback';document.getElementById('quizNext').style.display='none';document.getElementById('quizResult').textContent='참 잘했어요! ⭐';complete('quiz')}}
+function resetQuiz(){qi=0;renderQuiz()}
+function makePlan(){let p=document.getElementById('place').value,problem=document.getElementById('problem').value.trim(),idea=document.getElementById('idea').value.trim(),keys=[...document.querySelectorAll('#keyChecks input:checked')].map(x=>x.value);let out=document.getElementById('planOutput');if(!problem||!idea){out.className='feedback show bad';out.textContent='불편한 점과 개선 아이디어를 모두 적어 주세요.';return}out.className='feedback show good';out.innerHTML=`<h3>🌟 나의 유니버설 디자인 제안서</h3><p><b>장소:</b> ${escapeHtml(p)}</p><p><b>불편한 점:</b> ${escapeHtml(problem)}</p><p><b>개선 아이디어:</b> ${escapeHtml(idea)}</p><p><b>생각한 디자인 열쇠:</b> ${keys.length?keys.map(escapeHtml).join(' · '):'선택하지 않음'}</p><p>모두가 편리한 공간을 만들기 위한 멋진 제안이에요!</p>`;complete('design')}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+const memoryPairs=[
+ ['👥','누구나 사용 가능','나이와 몸 상태가 달라도 함께 이용할 수 있어요.'],
+ ['👆','간단하고 직관적','사용 방법을 한눈에 알 수 있어요.'],
+ ['🦺','안전 보장','실수하거나 다칠 위험을 줄여요.'],
+ ['💞','배려와 공감','다양한 사람의 입장에서 생각해요.'],
+ ['🏡','생활 속 활용','일상에서 자주, 편리하게 사용할 수 있어요.']
+];
+let memoryDeck=[],memoryOpen=[],memoryMatched=new Set(),memoryMoves=0,memoryBusy=false;
+function startMemory(){
+ memoryDeck=[];
+ memoryPairs.forEach((pair,i)=>{
+  memoryDeck.push({id:i,kind:'name',front:pair[0]+' '+pair[1]});
+  memoryDeck.push({id:i,kind:'meaning',front:pair[2]});
+ });
+ for(let i=memoryDeck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[memoryDeck[i],memoryDeck[j]]=[memoryDeck[j],memoryDeck[i]];}
+ memoryOpen=[];memoryMatched=new Set();memoryMoves=0;memoryBusy=false;
+ document.getElementById('memoryCount').textContent='찾은 짝 0 / 5';
+ document.getElementById('memoryMoves').textContent='시도 0회';
+ document.getElementById('memoryFeedback').className='feedback';
+ document.getElementById('memoryResult').textContent='';
+ renderMemory();
+}
+function renderMemory(){
+ const grid=document.getElementById('memoryGrid');
+ grid.innerHTML=memoryDeck.map((card,i)=>{
+  const open=memoryOpen.includes(i)||memoryMatched.has(i);
+  const matched=memoryMatched.has(i);
+  return `<button class="opt" style="min-height:100px;text-align:center;padding:9px;background:${matched?'#e2f6e9':open?'#fff4d9':'#247b72'};color:${open?'#263b39':'white'};border-color:${matched?'#65b98c':'#247b72'};font-size:${card.kind==='meaning'?'13px':'15px'}" ${matched||open||memoryBusy?'disabled':''} onclick="flipMemory(${i})">${open?escapeHtml(card.front):'❔<br><small>카드 열기</small>'}</button>`;
+ }).join('');
+}
+function flipMemory(i){
+ if(memoryBusy||memoryOpen.includes(i)||memoryMatched.has(i))return;
+ memoryOpen.push(i);renderMemory();
+ if(memoryOpen.length===2){
+  memoryMoves++;document.getElementById('memoryMoves').textContent=`시도 ${memoryMoves}회`;
+  const [a,b]=memoryOpen;
+  if(memoryDeck[a].id===memoryDeck[b].id&&memoryDeck[a].kind!==memoryDeck[b].kind){
+   memoryMatched.add(a);memoryMatched.add(b);memoryOpen=[];
+   document.getElementById('memoryCount').textContent=`찾은 짝 ${memoryMatched.size/2} / 5`;
+   renderMemory();
+   if(memoryMatched.size===10){
+    document.getElementById('memoryFeedback').className='feedback show good';
+    document.getElementById('memoryFeedback').textContent='멋져요! 다섯 가지 디자인 열쇠의 짝을 모두 찾았어요!';
+    document.getElementById('memoryResult').textContent=`총 ${memoryMoves}번 시도해서 성공했어요!`;
+    complete('memory');
+   }
+  }else{
+   memoryBusy=true;
+   document.getElementById('memoryFeedback').className='feedback show bad';
+   document.getElementById('memoryFeedback').textContent='아직 짝이 아니에요. 카드 내용을 기억하고 다시 도전해 보세요!';
+   setTimeout(()=>{memoryOpen=[];memoryBusy=false;renderMemory();},900);
+  }
+ }
+}
+
+renderGame();renderQuiz();startMemory();updateProgress();
+</script>
+</body>
+</html>
